@@ -1,0 +1,46 @@
+---
+title: "Assignment 1: My First Knitted Document"
+author: "Jasmine Cui"
+date: "1/31/2020"
+output: html_document
+---
+
+# Assignment 1: My First Knitted Document 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Load necessary packages 
+library(tidyverse)
+
+# Load data into R and show the structure of the election_info dataset -- I loaded my data using the import dataset button, but I think you want us to do it programmatically so I tried to show that I did this by setting my working directory to the labWeekly folder I have on my computer which contains this dataset
+setwd('/Users/jasminecui/Desktop/ECON220/labWeekly')
+
+# Use the function read_csv to read the elections_info file; create object called electionsInformation
+electionsInformation <- read_csv('/Users/jasminecui/Desktop/ECON220/labWeekly/election_info.csv')
+
+# Show the structure of the election_info dataset using the str() function
+str(electionsInformation)
+
+```
+
+## Create a new vector
+```{r}
+# Create a new vector called "like" which indicates whether or not you like the candidates 
+like <- c("Dislike", "Dislike", "Like", "Indifferent")
+
+
+# Add this vector to the electionInformation data frame 
+electionsInformationComplete <- mutate(electionsInformation, like = like)
+electionsInformationComplete                        
+                                  
+# or 
+# electionsInformationComplete <- cbind(electionsInformation, like)
+
+# as_tibble() converts an existing data frame into a tibble which you can then view to ensure you did this correctly. 
+# as_tibble(electionsInformationComplete)
+
+# View the data frame to make sure everything looks correct 
+view(electionsInformationComplete)
+# It looks okay, but I feel like I am forgetting something -- will return to check this over later if possible. 
+
+```
+
+

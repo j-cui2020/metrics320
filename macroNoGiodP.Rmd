@@ -1,0 +1,277 @@
+---
+title: "econAssignments"
+author: "Jasmine Cui"
+date: "1/21/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+# Assignment 1
+## Part I
+```{r cutiepie}
+myDog <- "Caramel"
+save(myDog, file = 'econAssi1+2.Rda')
+load('econAssi1+2.Rda')
+```
+
+```{r}
+# Header
+# Use the library function to library tidyverse which will also contain ggplot and dplyr
+library(tidyverse)
+
+# Clear away the environment :-)
+rm(list = ls())
+
+# Set the working directory! 
+setwd('/Users/jasminecui/Desktop/Metrics')
+
+# Create the object "birthday"
+birthday <- 04171999
+
+set.seed(birthday)
+
+# EN-DOG-GENEITY
+#    '
+#    /
+#    //                   .`"`.
+#    ((___________________/() d `--,
+#    |    G E N E I T Y        -._./
+#   |     _____________   /```^^`
+#    --   |             |||
+#    || /              |||
+#    || |              |||
+#    <<...>            <<.>
+```
+
+
+## Part II 
+```{r}
+# (1)
+# Flip a coin 10 times and generate mean; repeat process 1000 times 
+sampleMeans <- vector() 
+for (i in 1:1000) {
+  sampleMeans[i] <- mean(sample(0:1, 10, replace = TRUE))
+}
+
+# Plot the distribution of the means gathered above 
+hist(sampleMeans)
+
+# Find the mean of the sample means 
+summary(sampleMeans)
+# The mean of the means is 0.4858
+
+# Find the standard deviation of the sample means 
+sd(sampleMeans)
+# The SD of the sample means is 0.16
+
+# (2)
+# Flip a coin 100 times and generate mean; repeat process 1000 times
+sampleMeans2 <- vector()
+for (i in 1:1000) { 
+  sampleMeans2[i] <- mean(sample(0:1, 100, replace = TRUE))
+}
+
+# Plot the distribution of the means gathered above
+hist(sampleMeans2)
+
+# Find the mean of the sample means 
+summary(sampleMeans2)
+# The mean of the means is 0.4972
+
+# Find the standard deviation of the sample means 
+sd(sampleMeans2)
+# The SD of the sample means s 0.05
+```
+
+# Assignment 2
+## Part I 
+```{r}
+# Perform a data generating process 
+
+population <- vector()
+for (i in 1:1000000) {
+  x = rnorm(1, mean = 10, sd = 2)
+  u = rnorm(1, mean = 0, sd = 3)
+  population[i] <- 8 + 4*x + u 
+}
+```
+
+## Part II
+```{r}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(5, 7, 8, 8, 10, 12, 11, 15, 19, 18)
+j <- c(7, 7, 7, 8, 8, 7, 8, 8, 7, 6, 9, 9, 8, 9, 7, 8, 9, 6, 10, 10, 9)
+k <- c(18, 16, 15, 16, 10, 11, 11, 9, 11, 19, 8, 8, 6, 4, 9, 10, 7, 15, 10, 7, 5)
+
+# Does X or J look like it would have a greater variance? 
+# X looks like, immediately, like it would have a greater variance. This is because variance is a measure of variability and there is a lot more variability in X's observations than in J. If you look at the formula for calculating sample variance, you see that in the numerator it is the sum of the observed values minus the sample mean squared. Clearly, in X, a large number of the values are likely going to be further away from the sample mean than in J, where the values are pretty much clustered tightly around the mean. 
+# a. Find the sample variance of x and y
+
+# Find the sample variance of x using the var() function
+var(x)
+# The sample variance is 9.17
+
+# Find the sample variance of y using the var() function
+var(y)
+# The sample variance is 22.23
+
+# b. Find the sample covariance of x and y
+cov(x,y)
+# The covariance of x and y is 13.72
+
+# c. Find the sample variance of j and k
+
+# Find the sample variance of j using the var() function
+var(j)
+# The sample variance is 1.35
+
+# Find the sample variance of k using the var() function
+var(k)
+# The sample variance is 18.21
+
+# d. Find the sample covariance of j and k
+cov(j,k)
+# The covariance of j and k is -3.56
+
+# Present scatterplots of {x, y} and {j, k}
+
+# Plot {x, y} using the plot() function
+plot(x, y)
+
+# Plot {j, k} using the plot() function
+plot(j, k)
+```
+
+# Assignment 3
+## Part I
+```{r}
+# Take a sample of 1000 observations from the population data
+ypop <- vector()
+xpop <- vector()
+for (i in 1:1000) {
+  x = rnorm(1, mean = 10, sd = 2)
+  u = rnorm(1, mean = 0, sd = 3)
+  ypop[i] <- 8 + 4*x + u 
+  xpop[i] <- x
+}
+
+# Manually calculate beta0hat and beta1hat using the sum() and var() functions 
+
+# Calculate beta1hat first using the formula cov(x, y) / var(x)
+beta1hat <- cov(xpop, ypop) / var(xpop)
+# beta 1 is 4.01
+
+# Calculate beta0hat using the equation y bar minus beta 1 hat multiplied by x bar 
+beta0hat <- mean(ypop) - beta1hat*mean(xpop)
+# beta 0 is 7.89
+
+# Check if these values look reasonable by creating a plot using the plot() function
+plot(xpop, ypop)
+
+# Check again by running a regression using the lm() function and seeing if the output matches what was calculated 
+lm(ypop ~ xpop)
+# It does! When we run the regression, the output reports that the intercept is 7.89 and the slope is 4.01 :-) 
+```
+
+## Part II 
+```{r}
+# Create a vector which contains the fitted / predicted values; we use the values for beta0hat and beta1hat because this is the estimated line and we must use the values that were generated using our sample data; it is important not to conflate beta0hat and beta1hat with beta 0 and beta 1. 
+yhat <- vector()
+residuals <- vector()
+for (i in 1:1000) {
+  yhat[i] <- beta0hat + beta1hat*xpop[i]
+  residuals[i] <- ypop[i] - yhat[i] 
+}
+# Self note, do not, when writing loop, assign the output of the DGP to the whole vector because you will only store that one value, you have to remember that you are only storing for one individual "loop" of the process. . .so, here, instead of assigning beta0hat + beta1hat*xpop[i]  to yhat, it should be assigned to yhat[i]
+
+# Create a data frame so that all of the values can be compared in a neat, unified way. 
+tibble(x = xpop, y = yhat, residuals)
+
+# Now, I have to actually make the line using these fitted values; plot the fitted values using the historical values for x  
+plot(xpop, yhat)
+
+# Now, I will plot the residuals to ensure that they are not heteroskedacic and are, generally, near 0
+plot(xpop, residuals)
+# Yes, these are true. 
+```
+
+# Assignment 4 
+## Part I 
+```{r}
+
+# a. Calculate R squared which is ESS / TSS -- ESS is explained sum of squares which is to say it represents the amount of variation in Y that is explained by X 
+
+# Calculate ESS components first by writing a loop
+ESSComp <- vector()
+for (i in 1:1000) {
+  ESSComp[i] <- yhat[i] - mean(ypop)
+}
+
+# Then, calculate ESS by summing up the components and squaring
+ESS <- sum(ESSComp^2)
+ESS
+# ESS is 68158.55 which seems large. . .but could be correct (?)
+
+# Find the TSS components which are calculated by using the ypop minus yhat squared
+TSSComp <- vector()
+for (i in 1:1000) {
+  TSSComp[i] <- ypop[i] - mean(ypop)
+}
+
+# Then, calculate TSS by summing up the components and squaring 
+TSS <- sum(TSSComp^2)
+TSS
+# TSS is 76969.14
+
+# Now, calculate R squared by dividing ESS by TSS 
+ESS/TSS
+# R squared is 0.89 
+
+# b. Show that for any individual observation TSSi ≠ ESSi + RSSi 
+# Calculate the RSS components 
+RSSComp <- vector()
+for (i in 1:1000) {
+  RSSComp[i] <- ypop[i] - yhat[i]
+}
+
+# Then, calculate the RSS by summing up the components and squaring 
+RSS <- sum(RSSComp^2)
+RSS
+# RSS is 8810.586
+
+babyShark <- tibble(ESSi = ESSComp^2, RSSi = RSSComp^2, TSSi = TSSComp^2)
+babySharkMutate <- dplyr::mutate(babyShark, ERSSi = ESSi + RSSi)
+babySharkMutate
+# You can see on the resulting table that the ERSSi (ESSi + RSSi) ≠ TSSi
+
+# Show that this; however, works across all observations 
+babySharkProof <- tibble(TSS, ESS, RSS)
+babySharkProofMutate <- dplyr::mutate(babySharkProof, ERSS = ESS + RSS)
+babySharkProofMutate
+# In the table, you can see that, across all observations, ERSS (ESS + RSS) = TSS 
+
+# c. Show that the sum of the residuals is approximately 0
+sum(residuals)
+# Yes, the output when we sum the residuals is 3.165e-12 which is very, very low and, effectively, approximately 0
+
+# Show that sum(x*u) is approximately 0 
+sum(x*residuals)
+# Yes, the output when we sum the x*residuals is 2.855e-11 which is very, very low and, effectively, approximately 0
+
+# Find the variance of the residuals 
+varianceResiduals <- var(residuals)
+# [1] 8.743309
+
+# Now, divide by TSS 
+betaHatVariance <- var(residuals)/TSS
+# [1] 0.0001230008
+
+# Find the standard error (SE because it is an estimator) of beta one hat 
+betaHatSE <- sqrt(betaHatVariance)
+# [1] 0.01109057
+```
+
+```{r}
+
+```
+

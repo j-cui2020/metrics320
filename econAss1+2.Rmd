@@ -1,0 +1,178 @@
+---
+title: "econAss1"
+author: "Jasmine Cui"
+date: "1/21/2020"
+output: html_document
+---
+
+# Assignment 1
+## Part I
+```{r cutiepie}
+myDog <- "Caramel"
+save(myDog, file = 'econAssi1+2.Rda')
+load('econAssi1+2.Rda')
+```
+
+```{r}
+# Header
+# Use the library function to library tidyverse which will also contain ggplot and dplyr
+library(tidyverse)
+
+# Clear away the environment :-)
+rm(list = ls())
+
+# Set the working directory! 
+setwd('/Users/jasminecui/Desktop/Metrics')
+
+# Create the object "birthday"
+birthday <- 04171999
+
+set.seed(birthday)
+
+#    '
+#    /
+#    //                   .`"`.
+#    ((___________________/() d `--,
+#    | D O G of G E N E I T Y  -._./
+#   |     _____________   /```^^`
+#    --   |             |||
+#    || /              |||
+#    || |              |||
+#    <<...>            <<.>
+```
+
+
+## Part II 
+```{r}
+# (1)
+# Flip a coin 10 times and generate mean; repeat process 1000 times 
+sampleMeans <- vector() 
+for (i in 1:1000) {
+  sampleMeans[i] <- mean(sample(0:1, 10, replace = TRUE))
+}
+
+# Plot the distribution of the means gathered above 
+hist(sampleMeans)
+
+# Find the mean of the sample means 
+summary(sampleMeans)
+# The mean of the means is 0.4858
+
+# Find the standard deviation of the sample means 
+sd(sampleMeans)
+# The SD of the sample means is 0.16
+
+# (2)
+# Flip a coin 100 times and generate mean; repeat process 1000 times
+sampleMeans2 <- vector()
+for (i in 1:1000) { 
+  sampleMeans2[i] <- mean(sample(0:1, 100, replace = TRUE))
+}
+
+# Plot the distribution of the means gathered above
+hist(sampleMeans2)
+
+# Find the mean of the sample means 
+summary(sampleMeans2)
+# The mean of the means is 0.4972
+
+# Find the standard deviation of the sample means 
+sd(sampleMeans2)
+# The SD of the sample means s 0.05
+```
+
+# Assignment 2
+## Part I 
+```{r}
+# Perform a data generating process 
+
+population <- vector()
+for (i in 1:1000000) {
+  x = rnorm(1, mean = 10, sd = 2)
+  u = rnorm(1, mean = 0, sd = 3)
+  population[i] <- 8 + 4*x + u 
+}
+```
+
+## Part II
+```{r}
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(5, 7, 8, 8, 10, 12, 11, 15, 19, 18)
+j <- c(7, 7, 7, 8, 8, 7, 8, 8, 7, 6, 9, 9, 8, 9, 7, 8, 9, 6, 10, 10, 9)
+k <- c(18, 16, 15, 16, 10, 11, 11, 9, 11, 19, 8, 8, 6, 4, 9, 10, 7, 15, 10, 7, 5)
+
+# Does X or J look like it would have a greater variance? 
+# X looks like, immediately, like it would have a greater variance. This is because variance is a measure of variability and there is a lot more variability in X's observations than in J. If you look at the formula for calculating sample variance, you see that in the numerator it is the sum of the observed values minus the sample mean squared. Clearly, in X, a large number of the values are likely going to be further away from the sample mean than in J, where the values are pretty much clustered tightly around the mean. 
+# a. Find the sample variance of x and y
+
+# Find the sample variance of x using the var() function
+var(x)
+# The sample variance is 9.17
+
+# Find the sample variance of y using the var() function
+var(y)
+# The sample variance is 22.23
+
+# b. Find the sample covariance of x and y
+cov(x,y)
+# The covariance of x and y is 13.72
+
+# c. Find the sample variance of j and k
+
+# Find the sample variance of j using the var() function
+var(j)
+# The sample variance is 1.35
+
+# Find the sample variance of k using the var() function
+var(k)
+# The sample variance is 18.21
+
+# d. Find the sample covariance of j and k
+cov(j,k)
+# The covariance of j and k is -3.56
+
+# Present scatterplots of {x, y} and {j, k}
+
+# Plot {x, y} using the plot() function
+plot(x, y)
+
+# Plot {j, k} using the plot() function
+plot(j, k)
+```
+
+# Assignment 3
+## Part I
+```{r}
+# Take a sample of 1000 observations from the population data
+ypop <- vector()
+xpop <- vector()
+for (i in 1:1000) {
+  x = rnorm(1, mean = 10, sd = 2)
+  u = rnorm(1, mean = 0, sd = 3)
+  ypop[i] <- 8 + 4*x + u 
+  xpop[i] <- x
+}
+
+# Manually calculate beta 0 and beta 1 using the sum() and var() functions 
+
+# Calculate beta 1 hat first using the formula cov(x, y) / var(x)
+beta1hat <- cov(xpop, ypop) / var(xpop)
+# beta 1 is 4.01
+
+# Calculate beta 0 using the equation y bar minus beta 1 hat multiplied by x bar 
+beta0 <- mean(ypop) - beta1hat*mean(xpop)
+# beta 0 is 7.89
+
+# Check if these values look reasonable by creating a plot using the plot() function
+plot(xpop, ypop)
+
+# Check again by running a regression using the lm() function and seeing if the output matches what was calculated 
+lm(ypop ~ xpop)
+# It does! When we run the regression, the output reports that the intercept is 7.89 and the slope is 4.01 :-) 
+```
+
+## Part II 
+```{r}
+
+```
+
